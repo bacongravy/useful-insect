@@ -1,0 +1,23 @@
+name: deploy
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+
+      - name: Configure glitcheroo
+        run: |
+          git remote add glitcheroo ${GLITCH_GIT_URL}
+        env:
+          GLITCH_GIT_URL: ${{ secrets.GLITCH_GIT_URL }}
+        
+      - name: Deploy project
+        run: |
+          npx glitcheroo deploy
