@@ -12,9 +12,9 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v2
 
-      - name: Set TARGET_URL environment variable
+      - name: Set ENVIRONMENT_URL environment variable
         run: |
-          echo "::set-env name=TARGET_URL::https://glitch.com/~$(basename "${GLITCH_GIT_URL}")"
+          echo "::set-env name=ENVIRONMENT_URL::https://glitch.com/~$(basename "${GLITCH_GIT_URL}")"
         env:
           GLITCH_GIT_URL: ${{ secrets.GLITCH_GIT_URL }}
         
@@ -23,8 +23,6 @@ jobs:
         id: deployment
         with:
           token: "${{ github.token }}"
-          target_url: "${{ env.TARGET_URL }}"
-          environment: production
 
       - name: Add glitcheroo git remote
         run: |
@@ -41,7 +39,7 @@ jobs:
         uses: chrnorm/deployment-status@releases/v1
         with:
           token: "${{ github.token }}"
-          target_url: "${{ env.TARGET_URL }}"
+          environment_url: "${{ env.ENVIRONMENT_URL }}"
           state: "success"
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
@@ -50,6 +48,6 @@ jobs:
         uses: chrnorm/deployment-status@releases/v1
         with:
           token: "${{ github.token }}"
-          target_url: "${{ env.TARGET_URL }}"
+          environment_url: "${{ env.ENVIRONMENT_URL }}"
           state: "failure"
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
